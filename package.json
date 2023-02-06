@@ -1,0 +1,19 @@
+{
+  "name": "mern-chatapp",
+  "version": "1.0.0",
+  "description": "Chat App Using Mern Stack",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon server/index.js"
+  },
+  "keywords": [],
+  "author": "Muhammad Waleed Khan",
+  "license": "ISC",
+  "dependencies": {
+    "colors": "^1.4.0",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "mongoose": "^6.9.0",
+    "nodemon": "^2.0.20"
+  }
+}
