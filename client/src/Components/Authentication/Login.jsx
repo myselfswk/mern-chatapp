@@ -1,18 +1,74 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Input, InputGroup, InputRightElement, VStack } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
+import axios from 'axios';
+import { Button, Input, InputGroup, InputRightElement, VStack, useToast } from "@chakra-ui/react";
 import { FormControl, FormHelperText, FormLabel } from "@chakra-ui/form-control";
 
 const Login = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-
+    const [loading, setLoading] = useState(false);
     const [show, setShow] = useState(false);
+
+    const toast = useToast();
+    const navigate = useNavigate();
 
     const handleClick = () => {
         setShow(curr => !curr);
     }
 
-    const submitHandle = () => { }
+    const submitHandle = async () => {
+        setLoading(true);
+        if (!email || !password) {
+            toast({
+                title: "Empty Fields",
+                description: "Please Fill all the Feilds",
+                status: "warning",
+                duration: 5000,
+                isClosable: true,
+                position: "bottom",
+            });
+            setLoading(false);
+            return;
+        }
+
+        try {
+            const config = {
+                headers: {
+                    "Content-type": "application/json",
+                },
+            };
+
+            const { data } = await axios.post(
+                "/api/user/login",
+                { email, password },
+                config
+            );
+
+            toast({
+                title: "Login Success",
+                description: "User Login Successfully",
+                status: "success",
+                duration: 5000,
+                isClosable: true,
+                position: "bottom",
+            });
+            localStorage.setItem("userInfo", JSON.stringify(data));
+            setLoading(false);
+            navigate("/chat");
+
+        } catch (error) {
+            toast({
+                title: "Error Occured!",
+                description: error.response.data.message,
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+                position: "bottom",
+            });
+            setLoading(false);
+        }
+    }
 
     const guestUser = () => {
         setEmail('guest@example.com');
@@ -39,7 +95,7 @@ const Login = () => {
                 </InputGroup>
             </FormControl>
 
-            <Button colorScheme="blue" variant="outline" width="100%" marginTop="15px" onClick={submitHandle}>Login</Button>
+            <Button colorScheme="blue" variant="outline" width="100%" marginTop="15px" onClick={submitHandle} isLoading={loading}>Login</Button>
             <Button variant="outline" colorScheme="red" width="100%" onClick={guestUser}>Get Guest User Credential</Button>
         </VStack>
     )
