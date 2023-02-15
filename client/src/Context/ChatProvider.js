@@ -1,0 +1,34 @@
+import React, { useState, createContext, useContext, useEffect } from 'react';
+import { useNavigate } from "react-router-dom";
+
+const ChatContext = createContext();
+
+// provider that wrap whole chat app
+const ChatProvider = ({ children }) => {
+    const [user, setUser] = useState();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const userInfo = JSON.parse(localStorage.getItem("userInfo"));
+        setUser(userInfo);
+
+        if (!userInfo) {
+            navigate('/', { replace: true });
+        }
+    }, [navigate]);
+
+    return (
+        <ChatContext.Provider value={{
+            user,
+            setUser
+        }}>
+            {children}
+        </ChatContext.Provider>
+    )
+}
+
+export const ChatState = () => {
+    return useContext(ChatContext);
+}
+
+export default ChatProvider;
