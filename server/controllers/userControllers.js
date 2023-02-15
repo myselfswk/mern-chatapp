@@ -65,4 +65,24 @@ const authUser = asyncHandler(async (req, res) => {
     }
 });
 
-module.exports = { userRegister, authUser };
+// Get All User Controller
+const allUsers = asyncHandler(async (req, res) => {
+    try {
+        // search if there is any query inside keyword
+        const keyword = req.query.search ? {
+            $or: [
+                { name: { $regex: req.query.search, $options: "i" } },
+                { email: { $regex: req.query.search, $options: "i" } }
+            ]
+        } : {}
+
+        // find all the user but not that one who is logged in
+        const users = await User.find(keyword).find({ _id: { $ne: req.user._id } });
+        res.send(users);
+
+    } catch (error) {
+        res.status(500).send({ message: error.message });
+    }
+});
+
+module.exports = { userRegister, authUser, allUsers };

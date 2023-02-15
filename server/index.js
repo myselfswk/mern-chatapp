@@ -6,6 +6,7 @@ const dotenv = require('dotenv');
 const connection = require('./config/db');
 const dataRoutes = require('./routes/dataRoutes');
 const userRoutes = require('./routes/userRoutes');
+const chatRoutes = require('./routes/chatRoutes');
 const { errorHandler, notFound } = require('./middlewares/errorMiddlewares');
 require('colors');
 
@@ -23,9 +24,10 @@ app.get('/', (req, res) => {
     res.send("API is Running");
 });
 
-// use Routes
+// use Routes (end points)
 app.use('/api/', dataRoutes);
 app.use('/api/user', userRoutes);
+app.use('/api/chat', chatRoutes);
 
 // error handling function or middlewares
 app.use(notFound);
