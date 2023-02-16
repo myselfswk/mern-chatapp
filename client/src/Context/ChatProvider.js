@@ -6,6 +6,8 @@ const ChatContext = createContext();
 // provider that wrap whole chat app
 const ChatProvider = ({ children }) => {
     const [user, setUser] = useState();
+    const [selectedChat, setSelectedChat] = useState();
+    const [chats, setChats] = useState([]);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -20,7 +22,11 @@ const ChatProvider = ({ children }) => {
     return (
         <ChatContext.Provider value={{
             user,
-            setUser
+            setUser,
+            selectedChat,
+            setSelectedChat,
+            chats,
+            setChats
         }}>
             {children}
         </ChatContext.Provider>

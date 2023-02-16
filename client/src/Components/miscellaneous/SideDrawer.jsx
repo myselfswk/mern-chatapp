@@ -4,7 +4,7 @@ import {
     Tooltip, Button, Menu, MenuButton, MenuItem,
     MenuList, MenuDivider, Avatar, Input, useToast,
     Drawer, DrawerBody, DrawerFooter, DrawerHeader,
-    DrawerOverlay, DrawerContent, DrawerCloseButton,
+    DrawerOverlay, DrawerContent, DrawerCloseButton, Spinner
 } from '@chakra-ui/react';
 import { BellIcon, ChevronDownIcon } from '@chakra-ui/icons';
 import { useDisclosure } from '@chakra-ui/hooks';
@@ -13,6 +13,8 @@ import axios from 'axios';
 
 import { ChatState } from '../../Context/ChatProvider';
 import ProfileModal from './ProfileModal';
+import ChatLoading from '../ChatLoading';
+import UserListItem from '../User Avatar/UserListItem';
 
 const SideDrawer = () => {
     const [search, setSearch] = useState("");
@@ -21,7 +23,7 @@ const SideDrawer = () => {
     const [loadingChat, setLoadingChat] = useState(false);
 
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const { user } = ChatState();
+    const { user, setSelectedChat, chats, setChats } = ChatState();
     const navigate = useNavigate()
     const toast = useToast()
 
@@ -60,6 +62,40 @@ const SideDrawer = () => {
             toast({
                 title: "Error Occured!",
                 description: "Failed to Load the Search Results",
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+                position: "bottom-left",
+            });
+        }
+    }
+
+    // Access Chat with ID
+    const accessChat = async (userId) => {
+        try {
+            setLoadingChat(true);
+            const config = {
+                headers: {
+                    // we use content-type because we send some json data
+                    "Content-type": "application/json",
+                    Authorization: `Bearer ${user.token}`,
+                },
+            };
+
+            // post request for chat
+            const { data } = await axios.post('/api/chat', { userId }, config);
+            // check if the chat is already present than append in it, not create new chat
+            if (!chats.find((c) => c._id === data.id)) {
+                setChats([data, ...chats]);
+            }
+            setSelectedChat(data);
+            setLoadingChat(false);
+            onClose();
+
+        } catch (error) {
+            toast({
+                title: "Error Occured!",
+                description: error.message,
                 status: "error",
                 duration: 5000,
                 isClosable: true,
@@ -126,6 +162,21 @@ const SideDrawer = () => {
                             />
                             <Button onClick={handleSearch}>Go</Button>
                         </Box>
+                        {
+                            // if loading show laod then show details
+                            loading ? (
+                                <ChatLoading />
+                            ) : (
+                                searchResult?.map((user) => (
+                                    <UserListItem
+                                        key={user._id}
+                                        user={user}
+                                        handleFunction={() => accessChat(user._id)}
+                                    />
+                                ))
+                            )
+                        }
+                        {loadingChat && <Spinner ml="auto" display="flex" />}
                     </DrawerBody>
                 </DrawerContent>
             </Drawer>
