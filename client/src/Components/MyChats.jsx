@@ -5,9 +5,10 @@ import axios from 'axios';
 
 import { ChatState } from '../Context/ChatProvider';
 import ChatLoading from '../Components/ChatLoading';
+import GroupChatModal from '../Components/miscellaneous/GroupChatModal';
 import { getSender } from '../config/ChatLogics';
 
-const MyChats = () => {
+const MyChats = ({ fetchAgain }) => {
     const [loggedUser, setLoggedUser] = useState();
     const { chats, setChats, user, selectedChat, setSelectedChat } = ChatState();
     const toast = useToast();
@@ -39,7 +40,8 @@ const MyChats = () => {
     useEffect(() => {
         setLoggedUser(JSON.parse(localStorage.getItem("userInfo")));
         fetchChats();
-    }, []);
+    }, [fetchAgain]);
+    // whenever, any changes happen in the chats... useEffect runs
 
     return (
         <Box
@@ -63,13 +65,17 @@ const MyChats = () => {
                 alignItems="center"
             >
                 My Chats
-                <Button
-                    display="flex"
-                    fontSize={{ base: "17px", md: "10px", lg: "17px" }}
-                    rightIcon={<AddIcon />}
-                >
-                    New Group Chat
-                </Button>
+                {/* wrap this button GroupChatModal */}
+                <GroupChatModal>
+                    <Button
+                        display="flex"
+                        fontSize={{ base: "17px", lg: "17px" }}
+                        rightIcon={<AddIcon />}
+                        paddingLeft={{ md: "10px" }}
+                    >
+                        <Text display={{ base: "flex", lg: "flex", md: "none" }}>New Group Chat</Text>
+                    </Button>
+                </GroupChatModal>
             </Box>
             <Box
                 display="flex"

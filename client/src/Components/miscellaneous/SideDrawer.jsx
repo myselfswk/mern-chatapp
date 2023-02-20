@@ -14,7 +14,7 @@ import axios from 'axios';
 import { ChatState } from '../../Context/ChatProvider';
 import ProfileModal from './ProfileModal';
 import ChatLoading from '../ChatLoading';
-import UserListItem from '../User Avatar/UserListItem';
+import UserListItem from '../UserAvatar/UserListItem';
 
 const SideDrawer = () => {
     const [search, setSearch] = useState("");
