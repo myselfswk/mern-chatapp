@@ -7,6 +7,8 @@ const connection = require('./config/db');
 const dataRoutes = require('./routes/dataRoutes');
 const userRoutes = require('./routes/userRoutes');
 const chatRoutes = require('./routes/chatRoutes');
+const messageRoutes = require('./routes/messageRoutes');
+
 const { errorHandler, notFound } = require('./middlewares/errorMiddlewares');
 require('colors');
 
@@ -28,6 +30,7 @@ app.get('/', (req, res) => {
 app.use('/api/', dataRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/chat', chatRoutes);
+app.use('/api/messages', messageRoutes);
 
 // error handling function or middlewares
 app.use(notFound);
