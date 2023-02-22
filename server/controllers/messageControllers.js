@@ -2,6 +2,7 @@ const asyncHandler = require('express-async-handler');
 
 const { Message } = require('../models/messageModel');
 const { User } = require('../models/userModel');
+const { Chat } = require('../models/chatModel');
 
 // send Message Controller
 const sendMessage = asyncHandler(async (req, res) => {
@@ -28,13 +29,16 @@ const sendMessage = asyncHandler(async (req, res) => {
         // populate sender and message with id
         // user array inside chat id (eash user has id)
         // to populate an instance of mongoose class, we use execPopulate
-        message = await message.populate("sender", "name pic").execPopulate();
-        message = await message.populate("chat").execPopulate(); // populate chat (populate everything from chat object)
+        // .execPopulate()
+        message = await message.populate("sender", "name pic");
+        // .execPopulate();
+        message = await message.populate("chat") // populate chat (populate everything from chat object)
         message = await User.populate(message, { //populate list of the user (with name pic & email)
             path: "chat.users",
             select: "name pic email",
         });
 
+        // save latest message to chat to show that message on front
         await Chat.findByIdAndUpdate(req.body.chatId, { latestMessage: message });
 
         res.json(message);
@@ -46,6 +50,18 @@ const sendMessage = asyncHandler(async (req, res) => {
 });
 
 // Get all messages controller
-const allMessages = asyncHandler(async (req, res) => { });
+const allMessages = asyncHandler(async (req, res) => {
+    try {
+        const message = await Message.find({ chat: req.params.chatId })
+            .populate("sender", "name pic email")
+            .populate("chat");
+
+        res.json(message);
+
+    } catch (error) {
+        res.status(400);
+        throw new Error(error.message);
+    }
+});
 
 module.exports = { sendMessage, allMessages }
