@@ -2,7 +2,7 @@
   "name": "client",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://127.0.0.1:8080",
+  "proxy": "http://127.0.0.1:8080/",
   "dependencies": {
     "@chakra-ui/icons": "^2.0.17",
     "@chakra-ui/react": "^2.4.9",
@@ -15,9 +15,11 @@
     "framer-motion": "^9.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-lottie": "^1.2.3",
     "react-router-dom": "^6.8.0",
     "react-scripts": "5.0.1",
     "react-scrollable-feed": "^1.3.2",
+    "socket.io-client": "^4.6.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
