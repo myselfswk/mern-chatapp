@@ -40,7 +40,7 @@ const MyChats = ({ fetchAgain }) => {
     useEffect(() => {
         setLoggedUser(JSON.parse(localStorage.getItem("userInfo")));
         fetchChats();
-    }, [fetchAgain]);
+    }, [fetchAgain, chats]);
     // whenever, any changes happen in the chats... useEffect runs
 
     return (
@@ -65,7 +65,6 @@ const MyChats = ({ fetchAgain }) => {
                 alignItems="center"
             >
                 My Chats
-                {/* wrap this button GroupChatModal */}
                 <GroupChatModal>
                     <Button
                         display="flex"

@@ -33,7 +33,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     const [typing, setTyping] = useState(false);
     const [istyping, setIsTyping] = useState(false);
 
-    const { user, selectedChat, setSelectedChat } = ChatState();
+    const { user, selectedChat, setSelectedChat, notification, setNotification } = ChatState();
     const toast = useToast();
 
     // Animation options
@@ -121,10 +121,10 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         socket.on("connected", () => setSocketConnected(true));
         socket.on("typing", () => setIsTyping(true));
         socket.on("stop typing", () => setIsTyping(false));
-    }, []);
+    }, [user]);
 
     useEffect(() => {
-        // call fetch messages to useEffect in order to rerender if any message occur
+        // call fetch messages to useEffect in order to re-render if any message occur
         fetchMessages();
 
         // keep the backup of selected chat
@@ -138,13 +138,13 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         socket.on('message recieved', (newMessageRecieved) => {
             if (
                 !selectedChatCompare || // if chat is not selected or doesn't match current chat
-                selectedChatCompare._id !== newMessageRecieved.chat._id //show message on that chat box that send message
+                selectedChatCompare._id !== newMessageRecieved.chat._id //show notification if selected chat is not eqaul with new message chat that recieved
             ) {
                 // give notification
-                // if (!notification.includes(newMessageRecieved)) {
-                //     setNotification([newMessageRecieved, ...notification]);
-                //     setFetchAgain(!fetchAgain);
-                // }
+                if (!notification.includes(newMessageRecieved)) {  //notification object doesn't have new message (doesn't include the message if chat is selected)
+                    setNotification([newMessageRecieved, ...notification]); // ...notification (spread remaining notification)
+                    setFetchAgain(!fetchAgain); // update list of our chat (updated list of chat)
+                }
             } else {
                 setMessages([...messages, newMessageRecieved]);
             }

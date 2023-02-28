@@ -9,12 +9,16 @@ import {
 import { BellIcon, ChevronDownIcon } from '@chakra-ui/icons';
 import { useDisclosure } from '@chakra-ui/hooks';
 import { useNavigate } from 'react-router-dom';
+import NotificationBadge, { Effect } from "react-notification-badge";
+import Lottie from 'react-lottie';
 import axios from 'axios';
 
 import { ChatState } from '../../Context/ChatProvider';
 import ProfileModal from './ProfileModal';
 import ChatLoading from '../ChatLoading';
 import UserListItem from '../UserAvatar/UserListItem';
+import { getSender } from '../../config/ChatLogics';
+import animationData from '../../animations/message-plane.json';
 
 const SideDrawer = () => {
     const [search, setSearch] = useState("");
@@ -23,9 +27,19 @@ const SideDrawer = () => {
     const [loadingChat, setLoadingChat] = useState(false);
 
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const { user, setSelectedChat, chats, setChats } = ChatState();
-    const navigate = useNavigate()
-    const toast = useToast()
+    const { user, setSelectedChat, chats, setChats, notification, setNotification } = ChatState();
+    const navigate = useNavigate();
+    const toast = useToast();
+
+    // No Messages/Notification Animation options
+    const defaultOptions = {
+        loop: true,
+        autoplay: true,
+        animationData: animationData,
+        rendererSettings: {
+            preserveAspectRatio: "xMidYMid slice",
+        },
+    };
 
     // LogOut Functionality
     const logoutHandler = () => {
@@ -58,6 +72,7 @@ const SideDrawer = () => {
 
             setLoading(false);
             setSearchResult(data);
+
         } catch (error) {
             toast({
                 title: "Error Occured!",
@@ -85,7 +100,7 @@ const SideDrawer = () => {
             // post request for chat
             const { data } = await axios.post('/api/chat', { userId }, config);
             // check if the chat is already present than append in it, not create new chat
-            if (!chats.find((c) => c._id === data.id)) {
+            if (chats.find((c) => c._id === data.id)) {
                 setChats([data, ...chats]);
             }
             setSelectedChat(data);
@@ -130,8 +145,37 @@ const SideDrawer = () => {
                 <div>
                     <Menu>
                         <MenuButton p={1}>
+                            <NotificationBadge
+                                count={notification.length}
+                                effect={Effect.SCALE}
+                            />
                             <BellIcon fontSize="2xl" m={1} />
                         </MenuButton>
+                        <MenuList pl={2}>
+                            {/* if there is no message, no notification */}
+                            {!notification.length &&
+                                <Lottie
+                                    options={defaultOptions}
+                                    height={70}
+                                    width={70}
+                                    style={{ margin: "auto" }}
+                                />}
+                            {notification.map((notif) => (
+                                <MenuItem
+                                    key={notif._id}
+                                    onClick={() => {
+                                        setSelectedChat(notif.chat); //redirect to that chat from which message send
+                                        setNotification(notification.filter((n) => n !== notif)); //remove that notification on which onclicked perform from notification array
+                                    }}
+                                >
+                                    {
+                                        notif.chat.isGroupChat
+                                            ? `New Message in ${notif.chat.chatName}`
+                                            : `New Message from ${getSender(user, notif.chat.users)}`
+                                    }
+                                </MenuItem>
+                            ))}
+                        </MenuList>
                     </Menu>
                     <Menu>
                         <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
@@ -151,6 +195,7 @@ const SideDrawer = () => {
             <Drawer placement="left" onClose={onClose} isOpen={isOpen}>
                 <DrawerOverlay />
                 <DrawerContent>
+                    <DrawerCloseButton />
                     <DrawerHeader borderBottomWidth="1px">Search Users</DrawerHeader>
                     <DrawerBody>
                         <Box display="flex" pb={2}>
@@ -178,6 +223,10 @@ const SideDrawer = () => {
                         }
                         {loadingChat && <Spinner ml="auto" display="flex" />}
                     </DrawerBody>
+                    <hr />
+                    <DrawerFooter margin="auto">
+                        <Text>Mern Chat APP</Text>
+                    </DrawerFooter>
                 </DrawerContent>
             </Drawer>
         </>
