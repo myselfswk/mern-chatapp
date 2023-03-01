@@ -25,6 +25,7 @@ const MyChats = ({ fetchAgain }) => {
 
             const { data } = await axios.get("/api/chat", config);
             setChats(data);
+
         } catch (error) {
             toast({
                 title: "Error Occured!",
@@ -72,7 +73,7 @@ const MyChats = ({ fetchAgain }) => {
                         rightIcon={<AddIcon />}
                         paddingLeft={{ md: "10px" }}
                     >
-                        <Text display={{ base: "flex", lg: "flex", md: "none" }}>New Group Chat</Text>
+                        <Text display={{ base: "flex", lg: "flex", md: "none" }} fontSize={{ xl: "17px", lg: "0px" }}>New Group Chat</Text>
                     </Button>
                 </GroupChatModal>
             </Box>
@@ -109,7 +110,11 @@ const MyChats = ({ fetchAgain }) => {
                                     </Text>
                                     {chat.latestMessage && (
                                         <Text fontSize="xs">
-                                            <b>{chat.latestMessage.sender.name} : </b>
+                                            {
+                                                chat.isGroupChat ? (<b>{
+                                                    chat.latestMessage.sender.name === loggedUser.name ? (<>You</>) : (<>{chat.latestMessage.sender.name}</>)
+                                                } : </b>) : (<></>)
+                                            }
                                             {
                                                 chat.latestMessage.content.length > 50
                                                     ? chat.latestMessage.content.substring(0, 51) + "..."

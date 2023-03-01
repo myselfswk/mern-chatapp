@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Box, Text } from '@chakra-ui/layout';
 import {
-    Tooltip, Button, Menu, MenuButton, MenuItem,
+    Tooltip, Button, Menu, MenuButton, MenuItem, AvatarBadge,
     MenuList, MenuDivider, Avatar, Input, useToast,
     Drawer, DrawerBody, DrawerFooter, DrawerHeader,
     DrawerOverlay, DrawerContent, DrawerCloseButton, Spinner
@@ -33,8 +33,8 @@ const SideDrawer = () => {
 
     // No Messages/Notification Animation options
     const defaultOptions = {
-        loop: true,
-        autoplay: true,
+        loop: false,
+        autoplay: false,
         animationData: animationData,
         rendererSettings: {
             preserveAspectRatio: "xMidYMid slice",
@@ -179,7 +179,9 @@ const SideDrawer = () => {
                     </Menu>
                     <Menu>
                         <MenuButton as={Button} rightIcon={<ChevronDownIcon />}>
-                            <Avatar size="sm" cursor="pointer" name={user.name} src={user.pic} />
+                            <Avatar size="sm" cursor="pointer" name={user.name} src={user.pic}>
+                                <AvatarBadge bg="green" boxSize="11" />
+                            </Avatar>
                         </MenuButton>
                         <MenuList>
                             <ProfileModal user={user}>
@@ -225,7 +227,7 @@ const SideDrawer = () => {
                     </DrawerBody>
                     <hr />
                     <DrawerFooter margin="auto">
-                        <Text>Mern Chat APP</Text>
+                        <Text>By: Muhammad Waleed Khan</Text>
                     </DrawerFooter>
                 </DrawerContent>
             </Drawer>

@@ -252,7 +252,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                                         <div>
                                             <Lottie
                                                 options={defaultOptions}
-                                                // height={50}
                                                 width={70}
                                                 style={{ marginBottom: 15, marginLeft: 0 }}
                                             />
