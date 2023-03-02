@@ -65,6 +65,9 @@ const ProfileModal = ({ user, children }) => {
                         <Button colorScheme='blue' variant="outline" mr={3} onClick={onClose}>
                             Close
                         </Button>
+                        <Button colorScheme='purple' variant="outline" mr={3}>
+                            Update
+                        </Button>
                     </ModalFooter>
                 </ModalContent>
             </Modal>

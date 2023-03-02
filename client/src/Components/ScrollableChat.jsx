@@ -36,8 +36,10 @@ const ScrollableChat = ({ messages }) => {
                             )
                         }
                         <Tooltip label={
-                            m.createdAt.split("T")[1].substring(0, 2) > 12 ?
-                                `${m.createdAt.split("T")[1].substring(0, 2) - 7}:${m.createdAt.split("T")[1].substring(3, 8)} PM`
+                            parseInt(m.createdAt.split("T")[1].substring(0, 2)) + 5 > 12 ?
+                                parseInt(m.createdAt.split("T")[1].substring(0, 2)) + 5 > 23 ?
+                                    `${parseInt(m.createdAt.split("T")[1].substring(0, 2)) - 12}:${m.createdAt.split("T")[1].substring(3, 8)} PM`
+                                    : `${parseInt(m.createdAt.split("T")[1].substring(0, 2)) - 7}:${m.createdAt.split("T")[1].substring(3, 8)} PM`
                                 : `${m.createdAt.split("T")[1].substring(0, 8)} AM`
                         } hasArrow>
                             <span

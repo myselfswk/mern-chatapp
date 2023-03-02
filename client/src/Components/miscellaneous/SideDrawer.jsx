@@ -146,7 +146,7 @@ const SideDrawer = () => {
                     <Menu>
                         <MenuButton p={1}>
                             <NotificationBadge
-                                count={notification.length}
+                                count={notification.length > 9 ? "9+" : notification.length}
                                 effect={Effect.SCALE}
                             />
                             <BellIcon fontSize="2xl" m={1} />
@@ -165,7 +165,8 @@ const SideDrawer = () => {
                                     key={notif._id}
                                     onClick={() => {
                                         setSelectedChat(notif.chat); //redirect to that chat from which message send
-                                        setNotification(notification.filter((n) => n !== notif)); //remove that notification on which onclicked perform from notification array
+                                        setNotification(notification.filter((n) => n !== notif));
+                                        //remove that notification on which onclicked perform from notification array
                                     }}
                                 >
                                     {
