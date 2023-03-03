@@ -51,7 +51,6 @@ const io = require('socket.io')(server, {
 
 // now create a connection
 io.on("connection", (socket) => {
-    console.log("Connected to socket.io");
     // everytime user open app, he/she connected to his/her on socket
     // it will take the user data from the client
     // frontend will send the data and join the room

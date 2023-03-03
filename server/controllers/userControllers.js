@@ -85,4 +85,30 @@ const allUsers = asyncHandler(async (req, res) => {
     }
 });
 
-module.exports = { userRegister, authUser, allUsers };
+// Update User Controller
+const updateUser = asyncHandler(async (req, res) => {
+    try {
+        const id = req.params.id;
+        if (!req.body.name) {
+            res.status(400);
+            throw new Error("Please Enter All Fields");
+        }
+        const updatedData = {
+            name: req.body.name,
+            pic: req.body.pic
+        }
+        const options = { new: true };
+
+        const result = await User.findByIdAndUpdate(id, updatedData, options);
+        res.status(200).send({
+            message: "User Successfully Updated..!",
+            Name: result.name
+        });
+
+    } catch (error) {
+        res.status(500);
+        throw new Error(error.message);
+    }
+});
+
+module.exports = { userRegister, authUser, allUsers, updateUser };
