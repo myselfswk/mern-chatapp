@@ -12,6 +12,8 @@ import { useNavigate } from 'react-router-dom';
 import NotificationBadge, { Effect } from "react-notification-badge";
 import Lottie from 'react-lottie';
 import axios from 'axios';
+import PersonIcon from '@mui/icons-material/Person';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 
 import { ChatState } from '../../Context/ChatProvider';
 import ProfileModal from './ProfileModal';
@@ -186,10 +188,10 @@ const SideDrawer = () => {
                         </MenuButton>
                         <MenuList>
                             <ProfileModal user={user}>
-                                <MenuItem>My Profile</MenuItem>
+                                <MenuItem><PersonIcon /><Text paddingLeft="10px">My Profile</Text></MenuItem>
                             </ProfileModal>
                             <MenuDivider />
-                            <MenuItem onClick={logoutHandler}>LogOut</MenuItem>
+                            <MenuItem onClick={logoutHandler}><ExitToAppIcon /><Text paddingLeft="10px">Log Out</Text></MenuItem>
                         </MenuList>
                     </Menu>
                 </div>

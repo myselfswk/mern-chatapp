@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 import { Button, Input, InputGroup, InputRightElement, VStack, useToast } from "@chakra-ui/react";
@@ -53,6 +53,7 @@ const Login = () => {
             });
             localStorage.setItem("userInfo", JSON.stringify(data));
             setLoading(false);
+            navigate(0); //to refresh the page after login
             navigate("/chat");
 
         } catch (error) {

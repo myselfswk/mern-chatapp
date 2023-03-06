@@ -18,10 +18,12 @@ import { useNavigate } from 'react-router-dom';
 import { useDisclosure } from '@chakra-ui/hooks';
 import { ViewIcon } from '@chakra-ui/icons';
 import { Image } from '@chakra-ui/image';
+import CameraAltOutlinedIcon from '@mui/icons-material/CameraAltOutlined';
 
 const ProfileModal = ({ user, children }) => {
-    const { isOpen: isOpen, onOpen: onOpen, onClose: onClose } = useDisclosure();
+    const { isOpen: isViewOpen, onOpen: onViewOpen, onClose: onViewClose } = useDisclosure();
     const { isOpen: isUpdateOpen, onOpen: onUpdateOpen, onClose: onUpdateClose } = useDisclosure();
+
     const [name, setName] = useState('');
     const [pic, setPic] = useState();
     const [loading, setLoading] = useState(false);
@@ -51,6 +53,7 @@ const ProfileModal = ({ user, children }) => {
                 .then(data => {
                     setPic(data.url.toString());
                     setLoading(false);
+
                 })
                 .catch(err => {
                     setLoading(false);
@@ -86,10 +89,6 @@ const ProfileModal = ({ user, children }) => {
             return;
         }
 
-        // if (!pic || pic === undefined) {
-        //     setPic(alreadyImageUrl);
-        // }
-
         try {
             const config = {
                 headers: {
@@ -110,11 +109,14 @@ const ProfileModal = ({ user, children }) => {
             });
             const updateUser = JSON.parse(localStorage.getItem("userInfo"));
             updateUser["name"] = name;
-            updateUser["pic"] = pic;
+            if (pic) {
+                updateUser["pic"] = pic;
+            }
             localStorage.setItem("userInfo", JSON.stringify(updateUser));
 
             setLoading(false);
-            navigate('/chat');
+            navigate(0);
+
         } catch (error) {
             toast({
                 title: 'Error Occured',
@@ -132,16 +134,16 @@ const ProfileModal = ({ user, children }) => {
         <>
             {
                 children ?
-                    <span onClick={onOpen}>{children}</span>
+                    <span onClick={onViewOpen}>{children}</span>
                     : (
                         <IconButton
                             display={{ base: "flex" }}
                             icon={<ViewIcon />}
-                            onClick={onOpen}
+                            onClick={onViewOpen}
                         />
                     )
             }
-            <Modal size={{ lg: "lg", sm: "sm" }} isOpen={isOpen} onClose={onClose} isCentered>
+            <Modal size={{ lg: "lg", sm: "sm" }} isOpen={isViewOpen} onClose={onViewClose} isCentered>
                 <ModalOverlay />
                 <ModalContent h="410px">
                     <ModalHeader
@@ -172,70 +174,85 @@ const ProfileModal = ({ user, children }) => {
                     </ModalBody>
 
                     <ModalFooter>
-                        <Button colorScheme='blue' variant="outline" mr={3} onClick={onClose}>
+                        <Button colorScheme='blue' variant="outline" mr={3} onClick={onViewClose}>
                             Close
                         </Button>
-                        <Button colorScheme='purple' variant="outline" mr={3} onClick={onUpdateOpen}>
-                            Update
-                        </Button>
+                        {
+                            user.name === loggedInUser["name"] ? (
+                                <Button colorScheme='purple' variant="outline" mr={3} onClick={onUpdateOpen}>
+                                    Update
+                                </Button>
+                            ) : (
+                                <></>
+                            )
+                        }
+
                     </ModalFooter>
                 </ModalContent>
             </Modal>
 
             {/* Update Profile Modal */}
-            {
-                user.name === loggedInUser["name"] ? (
-                    <Modal size={{ lg: "lg", sm: "sm" }} isOpen={isUpdateOpen} onClose={onUpdateClose} isCentered>
-                        <ModalOverlay />
-                        <ModalContent h="350px">
-                            <ModalHeader
-                                fontSize="40px"
-                                fontFamily="Work sans"
-                                display="flex"
-                                justifyContent="center"
-                            >Update User</ModalHeader>
-                            <ModalCloseButton />
-                            <ModalBody
-                                display="flex"
-                                flexDir="column"
-                                justifyContent="space-between"
-                            >
-                                <Text
-                                    fontSize={{ base: "20px", md: "22px" }}
-                                    fontFamily="Work sans"
-                                >
-                                    Picture
-                                </Text>
-                                <Input type={"file"} p={1.5} accept="image/" width={{ base: "320px", sm: "280px" }} onChange={(e) => postDetails(e.target.files[0])} />
-                                <Text
-                                    fontSize={{ base: "20px", md: "22px" }}
-                                    fontFamily="Work sans"
-                                >
-                                    Name
-                                </Text>
-                                <Input value={name} width={{ base: "320px", sm: "280px" }} onChange={(e) => setName(e.target.value)} />
-                                <Text
-                                    fontSize={{ base: "20px", md: "22px" }}
-                                    fontFamily="Work sans"
-                                >
-                                    Email: {user.email}
-                                </Text>
-                            </ModalBody>
+            <Modal size={{ lg: "lg", sm: "sm" }} isOpen={isUpdateOpen} onClose={onUpdateClose} isCentered>
+                <ModalOverlay />
+                <ModalContent h="410px">
+                    <ModalHeader
+                        fontSize="40px"
+                        fontFamily="Work sans"
+                        display="flex"
+                        justifyContent="center"
+                    >Update User</ModalHeader>
+                    <ModalCloseButton />
+                    <ModalBody
+                        display="flex"
+                        flexDir="column"
+                        justifyContent="space-between"
+                    >
+                        <div style={{ margin: "auto" }}>
+                            <Image
+                                borderRadius="50%"
+                                boxSize="100px"
+                                src={user.pic}
+                            />
+                            <div>
+                                <Input
+                                    type="file"
+                                    accept="image/*"
+                                    display="none"
+                                    id="icon-button-file"
+                                    onChange={(e) => postDetails(e.target.files[0])}
+                                />
+                                <label htmlFor="icon-button-file">
+                                    <IconButton aria-label="upload picture" isRound={true} marginLeft="60px" marginTop="-20px" size="sm">
+                                        <CameraAltOutlinedIcon />
+                                    </IconButton>
+                                </label>
+                            </div>
+                        </div>
+                        <Text
+                            fontSize={{ base: "20px", md: "22px" }}
+                            fontFamily="Work sans"
+                        >
+                            Name
+                        </Text>
+                        <Input value={name} width={{ base: "320px", sm: "280px" }} onChange={(e) => setName(e.target.value)} />
+                        <Text
+                            fontSize={{ base: "20px", md: "22px" }}
+                            fontFamily="Work sans"
+                        >
+                            Email: {user.email}
+                        </Text>
+                    </ModalBody>
 
-                            <ModalFooter>
-                                <Button colorScheme='blue' variant="outline" mr={3} onClick={onUpdateClose}>
-                                    Close
-                                </Button>
-                                <Button colorScheme='purple' variant="outline" mr={3} isLoading={loading} onClick={submitHandle}>
-                                    Done
-                                </Button>
-                            </ModalFooter>
-                        </ModalContent>
-                    </Modal>
-                ) : (
-                    <></>
-                )
-            }
+                    <ModalFooter>
+                        <Button colorScheme='blue' variant="outline" mr={3} onClick={onUpdateClose}>
+                            Close
+                        </Button>
+                        <Button colorScheme='purple' variant="outline" mr={3} isLoading={loading} onClick={submitHandle}>
+                            Done
+                        </Button>
+                    </ModalFooter>
+                </ModalContent>
+            </Modal>
         </>
     )
 }
