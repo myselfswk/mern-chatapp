@@ -191,6 +191,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                             display="flex"
                             justifyContent={{ base: "space-between" }}
                             alignItems="center"
+                            fontWeight="semibold"
                         >
                             <IconButton
                                 display={{ base: "flex", md: "none" }}
@@ -201,14 +202,14 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                             {
                                 !selectedChat.isGroupChat ? (
                                     <>
-                                        <Text fontWeight="semibold">{getSender(user, selectedChat.users)}</Text>
+                                        {getSender(user, selectedChat.users)}
                                         <ProfileModal
                                             user={getSenderFull(user, selectedChat.users)}
                                         />
                                     </>
                                 ) : (
                                     <>
-                                        <Text fontWeight="semibold">{selectedChat.chatName.toUpperCase()}</Text>
+                                        {selectedChat.chatName.toUpperCase()}
                                         <UpdateGroupChatModal
                                             fetchAgain={fetchAgain}
                                             setFetchAgain={setFetchAgain}

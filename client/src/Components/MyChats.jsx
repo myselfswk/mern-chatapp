@@ -101,10 +101,10 @@ const MyChats = ({ fetchAgain }) => {
                                     borderRadius="lg"
                                     key={chat._id}
                                 >
-                                    <Text>
+                                    <Text fontWeight="semibold">
                                         {
                                             !chat.isGroupChat
-                                                ? (<Text fontWeight="semibold">{getSender(loggedUser, chat.users)}</Text>)
+                                                ? getSender(loggedUser, chat.users)
                                                 : chat.chatName
                                         }
                                     </Text>

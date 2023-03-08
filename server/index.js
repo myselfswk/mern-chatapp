@@ -8,6 +8,7 @@ const dataRoutes = require('./routes/dataRoutes');
 const userRoutes = require('./routes/userRoutes');
 const chatRoutes = require('./routes/chatRoutes');
 const messageRoutes = require('./routes/messageRoutes');
+const notificationRoutes = require('./routes/notificationRoutes');
 
 const { errorHandler, notFound } = require('./middlewares/errorMiddlewares');
 require('colors');
@@ -31,6 +32,7 @@ app.use('/api/', dataRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/messages', messageRoutes);
+app.use('/api/notifications', notificationRoutes);
 
 // error handling function or middlewares
 app.use(notFound);

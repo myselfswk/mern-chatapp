@@ -91,7 +91,7 @@ const updateUser = asyncHandler(async (req, res) => {
         const id = req.params.id;
         if (!req.body.name) {
             res.status(400);
-            throw new Error("Please Enter All Fields");
+            throw new Error("Please Enter Name Fields");
         }
         const updatedData = {
             name: req.body.name,

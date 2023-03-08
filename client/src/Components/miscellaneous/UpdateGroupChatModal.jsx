@@ -138,6 +138,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
 
             setLoading(false);
             setSearchResult(data);
+            
         } catch (error) {
             toast({
                 title: "Error Occured!",
@@ -152,6 +153,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
 
     // Add user to existing group
     const handleAddUser = async (user1) => {
+        // user already exist in that group chat
         if (selectedChat.users.find((u) => u._id === user1._id)) {
             toast({
                 title: "User Already in group!",
