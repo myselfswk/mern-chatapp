@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Modal,
     ModalOverlay,
@@ -58,6 +58,7 @@ const ProfileModal = ({ user, children }) => {
                 .catch(err => {
                     setLoading(false);
                 });
+
         } else {
             toast({
                 title: 'Select Image',
@@ -129,6 +130,13 @@ const ProfileModal = ({ user, children }) => {
             setLoading(false);
         }
     }
+    useEffect(() => {
+        if (pic === undefined) {
+            setPic(user.pic);
+        } else {
+            setPic(pic);
+        }
+    }, [pic]);
 
     return (
         <>
@@ -209,9 +217,10 @@ const ProfileModal = ({ user, children }) => {
                     >
                         <div style={{ margin: "auto" }}>
                             <Image
-                                borderRadius="50%"
+                                loading='lazy'
+                                borderRadius="full"
                                 boxSize="100px"
-                                src={user.pic}
+                                src={pic}
                             />
                             <div>
                                 <Input
@@ -222,9 +231,15 @@ const ProfileModal = ({ user, children }) => {
                                     onChange={(e) => postDetails(e.target.files[0])}
                                 />
                                 <label htmlFor="icon-button-file">
-                                    <IconButton aria-label="upload picture" isRound={true} marginLeft="60px" marginTop="-20px" size="sm">
-                                        <CameraAltOutlinedIcon />
-                                    </IconButton>
+                                    <div style={{
+                                        cursor: "pointer",
+                                        marginLeft: "60px",
+                                        marginTop: "-16px"
+                                    }}
+                                    ><CameraAltOutlinedIcon style={{
+                                        backgroundColor: "white",
+                                        borderRadius: "50%",
+                                    }} /></div>
                                 </label>
                             </div>
                         </div>

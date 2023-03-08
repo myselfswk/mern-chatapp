@@ -201,14 +201,14 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                             {
                                 !selectedChat.isGroupChat ? (
                                     <>
-                                        {getSender(user, selectedChat.users)}
+                                        <Text fontWeight="semibold">{getSender(user, selectedChat.users)}</Text>
                                         <ProfileModal
                                             user={getSenderFull(user, selectedChat.users)}
                                         />
                                     </>
                                 ) : (
                                     <>
-                                        {selectedChat.chatName.toUpperCase()}
+                                        <Text fontWeight="semibold">{selectedChat.chatName.toUpperCase()}</Text>
                                         <UpdateGroupChatModal
                                             fetchAgain={fetchAgain}
                                             setFetchAgain={setFetchAgain}

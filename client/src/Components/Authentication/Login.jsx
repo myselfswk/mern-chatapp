@@ -53,7 +53,7 @@ const Login = () => {
             });
             localStorage.setItem("userInfo", JSON.stringify(data));
             setLoading(false);
-            navigate(0); //to refresh the page after login
+            navigate(0); //to reload the page after login
             navigate("/chat");
 
         } catch (error) {
