@@ -239,6 +239,7 @@ const ProfileModal = ({ user, children }) => {
                                     ><CameraAltOutlinedIcon style={{
                                         backgroundColor: "white",
                                         borderRadius: "50%",
+                                        fontSize: '25px'
                                     }} /></div>
                                 </label>
                             </div>
@@ -249,7 +250,11 @@ const ProfileModal = ({ user, children }) => {
                         >
                             Name
                         </Text>
-                        <Input value={name} width={{ base: "320px", sm: "280px" }} onChange={(e) => setName(e.target.value)} />
+                        <Input
+                            value={name}
+                            width={{ base: "320px", sm: "280px" }}
+                            onChange={(e) => setName(e.target.value)}
+                        />
                         <Text
                             fontSize={{ base: "20px", md: "22px" }}
                             fontFamily="Work sans"

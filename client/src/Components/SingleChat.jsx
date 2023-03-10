@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
     Box,
     Text,
@@ -47,7 +47,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     };
 
     // Fetch All Messages from single chat
-    const fetchMessages = async () => {
+    const fetchMessages = useCallback(async () => {
         // check if no chat is selected
         if (!selectedChat) return;
 
@@ -77,7 +77,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 position: "bottom",
             });
         }
-    }
+    }, [selectedChat, toast, user.token]);
 
     // Send Messages
     const sendMessages = async (event) => {
@@ -129,7 +129,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
         // keep the backup of selected chat
         selectedChatCompare = selectedChat;
-    }, [selectedChat]);
+    }, [selectedChat, fetchMessages]);
     // selectedChat, whenever user select different chat, useEffect will render UI
 
     useEffect(() => {
