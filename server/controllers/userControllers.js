@@ -65,7 +65,7 @@ const authUser = asyncHandler(async (req, res) => {
     }
 });
 
-// Get All User Controller
+// Get All User Controller (For Search)
 const allUsers = asyncHandler(async (req, res) => {
     try {
         // search if there is any query inside keyword
@@ -81,7 +81,21 @@ const allUsers = asyncHandler(async (req, res) => {
         res.send(users);
 
     } catch (error) {
-        res.status(500).send({ message: error.message });
+        res.status(500);
+        throw new Error(error.message);
+    }
+});
+
+// Get All User Controller
+const getAllUsers = asyncHandler(async (req, res) => {
+    try {
+        // find all the user but not that one who is logged in
+        const users = await User.find({ _id: { $ne: req.user._id } });
+        res.send(users);
+
+    } catch (error) {
+        res.status(500);
+        throw new Error(error.message);
     }
 });
 
@@ -111,4 +125,4 @@ const updateUser = asyncHandler(async (req, res) => {
     }
 });
 
-module.exports = { userRegister, authUser, allUsers, updateUser };
+module.exports = { userRegister, authUser, allUsers, getAllUsers, updateUser };

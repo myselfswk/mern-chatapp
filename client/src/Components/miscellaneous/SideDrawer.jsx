@@ -21,6 +21,7 @@ import ChatLoading from '../ChatLoading';
 import UserListItem from '../UserAvatar/UserListItem';
 import { getSender } from '../../config/ChatLogics';
 import animationData from '../../animations/message-plane.json';
+import noSearchAnimationData from '../../animations/searchNotFound.json';
 
 const SideDrawer = () => {
     const [search, setSearch] = useState("");
@@ -35,13 +36,23 @@ const SideDrawer = () => {
 
     // No Messages/Notification Animation options
     const defaultOptions = {
-        loop: false,
-        autoplay: false,
+        loop: true,
+        autoplay: true,
         animationData: animationData,
         rendererSettings: {
             preserveAspectRatio: "xMidYMid slice",
-        },
+        }
     };
+
+    // No Search Result Found Animation
+    const noAnimationOptions = {
+        loop: true,
+        autoplay: true,
+        animationData: noSearchAnimationData,
+        rendererSettings: {
+            preserveAspectRatio: "xMidYMid slice",
+        }
+    }
 
     // LogOut Functionality
     const logoutHandler = () => {
@@ -120,6 +131,8 @@ const SideDrawer = () => {
             });
         }
     }
+
+    // Get All Users
 
     return (
         <>
@@ -217,13 +230,22 @@ const SideDrawer = () => {
                             loading ? (
                                 <ChatLoading />
                             ) : (
-                                searchResult?.map((user) => (
-                                    <UserListItem
-                                        key={user._id}
-                                        user={user}
-                                        handleFunction={() => accessChat(user._id)}
+                                searchResult.length > 0 ? (
+                                    searchResult.map((user) => (
+                                        <UserListItem
+                                            key={user._id}
+                                            user={user}
+                                            handleFunction={() => accessChat(user._id)}
+                                        />
+                                    ))
+                                ) : (
+                                    search.length > 0 && <Lottie
+                                        options={noAnimationOptions}
+                                        height={70}
+                                        width={70}
+                                        style={{ margin: "auto" }}
                                     />
-                                ))
+                                )
                             )
                         }
                         {loadingChat && <Spinner ml="auto" display="flex" />}
