@@ -136,7 +136,7 @@ const ProfileModal = ({ user, children }) => {
         } else {
             setPic(pic);
         }
-    }, [pic]);
+    }, [pic, user.pic]);
 
     return (
         <>

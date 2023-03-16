@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useToast, Box, Button, Text, Stack } from '@chakra-ui/react';
 import { AddIcon } from '@chakra-ui/icons';
 import axios from 'axios';
@@ -14,7 +14,7 @@ const MyChats = ({ fetchAgain }) => {
     const toast = useToast();
 
     // Get Chats from database
-    const fetchChats = async () => {
+    const fetchChats = useCallback(async () => {
         try {
             // Logged In User
             const config = {
@@ -29,19 +29,19 @@ const MyChats = ({ fetchAgain }) => {
         } catch (error) {
             toast({
                 title: "Error Occured!",
-                description: "Failed to Load the chats",
+                description: error.response.data.message,
                 status: "error",
                 duration: 5000,
                 isClosable: true,
                 position: "bottom-left",
             });
         }
-    };
+    }, [setChats, toast, user.token]);
 
     useEffect(() => {
         setLoggedUser(JSON.parse(localStorage.getItem("userInfo")));
         fetchChats();
-    }, [fetchAgain, chats]);
+    }, [fetchAgain, chats, fetchChats]);
     // whenever, any changes happen in the chats... useEffect runs
 
     return (
@@ -65,7 +65,7 @@ const MyChats = ({ fetchAgain }) => {
                 justifyContent="space-between"
                 alignItems="center"
             >
-                My Chats
+                <Text fontWeight="bold">My Chats</Text>
                 <GroupChatModal>
                     <Button
                         display="flex"

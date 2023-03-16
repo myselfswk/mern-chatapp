@@ -70,7 +70,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         } catch (error) {
             toast({
                 title: "Error Occured!",
-                description: "Failed to Load the Messages",
+                description: error.response.data.message,
                 status: "error",
                 duration: 5000,
                 isClosable: true,
@@ -104,7 +104,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             } catch (error) {
                 toast({
                     title: "Error Occured!",
-                    description: "Failed to send the Message",
+                    description: error.response.data.message,
                     status: "error",
                     duration: 5000,
                     isClosable: true,

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Box, Text } from '@chakra-ui/layout';
 import {
     Tooltip, Button, Menu, MenuButton, MenuItem, AvatarBadge,
@@ -62,17 +62,8 @@ const SideDrawer = () => {
     };
 
     // Handle Search Functionality
-    const handleSearch = async () => {
-        if (!search) {
-            toast({
-                title: "Please Enter something in search",
-                status: "warning",
-                duration: 5000,
-                isClosable: true,
-                position: "top-left",
-            });
-            return;
-        }
+    const handleSearch = async (query) => {
+        setSearch(query);
 
         try {
             setLoading(true);
@@ -90,7 +81,7 @@ const SideDrawer = () => {
         } catch (error) {
             toast({
                 title: "Error Occured!",
-                description: "Failed to Load the Search Results",
+                description: error.response.data.message,
                 status: "error",
                 duration: 5000,
                 isClosable: true,
@@ -134,7 +125,7 @@ const SideDrawer = () => {
     }
 
     // Get All Users
-    const handleAllUsers = async () => {
+    const handleAllUsers = useCallback(async () => {
         try {
             const config = {
                 headers: {
@@ -155,11 +146,11 @@ const SideDrawer = () => {
                 position: "bottom-left",
             });
         }
-    }
+    }, [toast, user.token]);
 
     useEffect(() => {
         handleAllUsers();
-    });
+    }, [handleAllUsers]);
 
     return (
         <>
@@ -248,42 +239,38 @@ const SideDrawer = () => {
                                 placeholder="Search by name or email"
                                 mr={2}
                                 value={search}
-                                onChange={(e) => setSearch(e.target.value)}
+                                onChange={(e) => handleSearch(e.target.value)}
                             />
-                            <Button onClick={handleSearch}>Go</Button>
                         </Box>
+                        <Text
+                            fontSize="2xl"
+                            fontWeight="bold"
+                        >User List:-</Text>
                         {
                             // if loading show laod then show details
                             loading ? (
                                 <ChatLoading />
                             ) : (
-                                searchResult.map((user) => (
-                                    <UserListItem
-                                        key={user._id}
-                                        user={user}
-                                        handleFunction={() => accessChat(user._id)}
+                                searchResult.length > 0 ? (
+                                    searchResult.map((user) => (
+                                        <UserListItem
+                                            key={user._id}
+                                            user={user}
+                                            handleFunction={() => accessChat(user._id)}
+                                        />
+                                    ))
+                                ) : (
+                                    searchResult.length < 1 && search.length > 0 && <Lottie
+                                        options={noAnimationOptions}
+                                        height={70}
+                                        width={70}
+                                        style={{ margin: "auto" }}
                                     />
-                                ))
-                                // searchResult.length > 0 ? (
-                                //     searchResult.map((user) => (
-                                //         <UserListItem
-                                //             key={user._id}
-                                //             user={user}
-                                //             handleFunction={() => accessChat(user._id)}
-                                //         />
-                                //     ))
-                                // ) : (
-                                //     search.length > 0 && <Lottie
-                                //         options={noAnimationOptions}
-                                //         height={70}
-                                //         width={70}
-                                //         style={{ margin: "auto" }}
-                                //     />
-                                // )
+                                )
                             )
                         }
                         {
-                            !searchResult.length && (
+                            search.length < 1 && searchResult.length < 1 && (
                                 allUsers?.map((users) => (
                                     <UserListItem
                                         key={users._id}
