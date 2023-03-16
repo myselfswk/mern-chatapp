@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Text } from '@chakra-ui/layout';
 import {
     Tooltip, Button, Menu, MenuButton, MenuItem, AvatarBadge,
@@ -26,6 +26,7 @@ import noSearchAnimationData from '../../animations/searchNotFound.json';
 const SideDrawer = () => {
     const [search, setSearch] = useState("");
     const [searchResult, setSearchResult] = useState([]);
+    const [allUsers, setAllUsers] = useState([]);
     const [loading, setLoading] = useState(false);
     const [loadingChat, setLoadingChat] = useState(false);
 
@@ -133,6 +134,32 @@ const SideDrawer = () => {
     }
 
     // Get All Users
+    const handleAllUsers = async () => {
+        try {
+            const config = {
+                headers: {
+                    Authorization: `Bearer ${user.token}`,
+                },
+            };
+
+            const { data } = await axios.get('/api/user/allusers', config);
+            setAllUsers(data);
+
+        } catch (error) {
+            toast({
+                title: "Error Occured!",
+                description: error.response.data.message,
+                status: "error",
+                duration: 5000,
+                isClosable: true,
+                position: "bottom-left",
+            });
+        }
+    }
+
+    useEffect(() => {
+        handleAllUsers();
+    });
 
     return (
         <>
@@ -230,22 +257,40 @@ const SideDrawer = () => {
                             loading ? (
                                 <ChatLoading />
                             ) : (
-                                searchResult.length > 0 ? (
-                                    searchResult.map((user) => (
-                                        <UserListItem
-                                            key={user._id}
-                                            user={user}
-                                            handleFunction={() => accessChat(user._id)}
-                                        />
-                                    ))
-                                ) : (
-                                    search.length > 0 && <Lottie
-                                        options={noAnimationOptions}
-                                        height={70}
-                                        width={70}
-                                        style={{ margin: "auto" }}
+                                searchResult.map((user) => (
+                                    <UserListItem
+                                        key={user._id}
+                                        user={user}
+                                        handleFunction={() => accessChat(user._id)}
                                     />
-                                )
+                                ))
+                                // searchResult.length > 0 ? (
+                                //     searchResult.map((user) => (
+                                //         <UserListItem
+                                //             key={user._id}
+                                //             user={user}
+                                //             handleFunction={() => accessChat(user._id)}
+                                //         />
+                                //     ))
+                                // ) : (
+                                //     search.length > 0 && <Lottie
+                                //         options={noAnimationOptions}
+                                //         height={70}
+                                //         width={70}
+                                //         style={{ margin: "auto" }}
+                                //     />
+                                // )
+                            )
+                        }
+                        {
+                            !searchResult.length && (
+                                allUsers?.map((users) => (
+                                    <UserListItem
+                                        key={users._id}
+                                        user={users}
+                                        handleFunction={() => accessChat(users._id)}
+                                    />
+                                ))
                             )
                         }
                         {loadingChat && <Spinner ml="auto" display="flex" />}
