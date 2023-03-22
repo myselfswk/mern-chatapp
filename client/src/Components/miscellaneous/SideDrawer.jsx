@@ -172,7 +172,7 @@ const SideDrawer = () => {
                         >Search User</Text>
                     </Button>
                 </Tooltip>
-                <Text fontSize="2xl" fontFamily="Work sans">
+                <Text fontSize={{ base: "sm", lg: "2xl", md: "2xl", sm: "xl" }} fontFamily="Work sans">
                     Chat App - Mern Stack
                 </Text>
                 <div>
@@ -235,12 +235,14 @@ const SideDrawer = () => {
                     <DrawerHeader borderBottomWidth="1px">Search Users</DrawerHeader>
                     <DrawerBody>
                         <Box display="flex" pb={2}>
-                            <Input
-                                placeholder="Search by name or email"
-                                mr={2}
-                                value={search}
-                                onChange={(e) => handleSearch(e.target.value)}
-                            />
+                            <Tooltip label="More than one word to search" hasArrow placement='bottom'>
+                                <Input
+                                    placeholder="Search by name or email"
+                                    mr={2}
+                                    value={search}
+                                    onChange={(e) => handleSearch(e.target.value)}
+                                />
+                            </Tooltip>
                         </Box>
                         <Text
                             fontSize="2xl"
