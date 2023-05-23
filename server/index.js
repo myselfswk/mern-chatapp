@@ -47,7 +47,7 @@ const io = require('socket.io')(server, {
     // for 60 sec, if user doesn't respond/message, the socket gonna close the connection (in order to save the bandwidth)
     pinTimeOut: 60000,
     cors: {
-        origin: "http://localhost:3000"
+        origin: "https://chatapp-mernapp.vercel.app"
     }
 });
 
