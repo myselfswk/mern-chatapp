@@ -187,9 +187,11 @@ const ProfileModal = ({ user, children }) => {
                         </Button>
                         {
                             user.name === loggedInUser["name"] ? (
-                                <Button colorScheme='purple' variant="outline" mr={3} onClick={onUpdateOpen}>
-                                    Update
-                                </Button>
+                                loggedInUser.name === "Guest User" ? (<></>) : (
+                                    <Button colorScheme='purple' variant="outline" mr={3} onClick={onUpdateOpen}>
+                                        Update
+                                    </Button>
+                                )
                             ) : (
                                 <></>
                             )

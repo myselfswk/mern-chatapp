@@ -2,7 +2,7 @@ const express = require('express');
 // now, create instance of express
 const app = express();
 const dotenv = require('dotenv');
-
+const cors = require('cors');
 const connection = require('./config/db');
 const dataRoutes = require('./routes/dataRoutes');
 const userRoutes = require('./routes/userRoutes');
@@ -37,13 +37,14 @@ app.use('/api/notifications', notificationRoutes);
 // error handling function or middlewares
 app.use(notFound);
 app.use(errorHandler);
+app.use(cors());
 
 const port = process.env.PORT || 8080;
 const server = app.listen(port, () => console.log(`App is Up and Running at PORT: ${port}`.yellow.bold));
 
 // setup socket io
 const io = require('socket.io')(server, {
-    // amount of time it will wait before its gose of
+    // amount of time it will wait before it will gose of
     // for 60 sec, if user doesn't respond/message, the socket gonna close the connection (in order to save the bandwidth)
     pinTimeOut: 60000,
     cors: {

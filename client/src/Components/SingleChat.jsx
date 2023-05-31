@@ -21,7 +21,7 @@ import animationData from '../animations/typing.json';
 import './Style.css';
 
 import io from 'socket.io-client';
-const ENDPOINT = "http://localhost:8080";
+const ENDPOINT = "https://mern-chatapp-kappa.vercel.app";
 var socket, selectedChatCompare;
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
