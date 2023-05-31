@@ -34,10 +34,16 @@ app.use('/api/chat', chatRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/notifications', notificationRoutes);
 
+// Configure CORS
+const corsOptions = {
+    origin: 'https://chatapp-mernapp.vercel.app',
+    methods: ['GET', 'POST', 'PUT'],
+};
+
 // error handling function or middlewares
 app.use(notFound);
 app.use(errorHandler);
-app.use(cors());
+app.use(cors(corsOptions));
 
 const port = process.env.PORT || 8080;
 const server = app.listen(port, () => console.log(`App is Up and Running at PORT: ${port}`.yellow.bold));
