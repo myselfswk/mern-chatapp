@@ -1,5 +1,6 @@
 {
     "version": 2,
+    "name": "chatapp-mernapp",
     "builds": [
         {
             "src": "index.js",
@@ -9,7 +10,7 @@
     "routes": [
         {
             "src": "/(.*)",
-            "dest": "index.js"
+            "dest": "/index.js"
         }
     ]
 }

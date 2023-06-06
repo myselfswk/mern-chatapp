@@ -34,6 +34,9 @@ app.use('/api/chat', chatRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/notifications', notificationRoutes);
 
+// this api hits if any broken api calls
+app.route('*').get(endPoint).post(endPoint).put(endPoint);
+
 // Configure CORS
 const corsOptions = {
     origin: 'https://chatapp-mernapp.vercel.app',
