@@ -4,13 +4,16 @@ const app = express();
 const dotenv = require('dotenv');
 const cors = require('cors');
 const connection = require('./config/db');
+
 const dataRoutes = require('./routes/dataRoutes');
 const userRoutes = require('./routes/userRoutes');
 const chatRoutes = require('./routes/chatRoutes');
 const messageRoutes = require('./routes/messageRoutes');
+const contactRoutes = require('./routes/contactRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
 
 const { errorHandler, notFound } = require('./middlewares/errorMiddlewares');
+const { endPoint } = require('./utils/endPoint');
 require('colors');
 
 dotenv.config();
@@ -32,15 +35,17 @@ app.use('/api/', dataRoutes);
 app.use('/api/user', userRoutes);
 app.use('/api/chat', chatRoutes);
 app.use('/api/messages', messageRoutes);
+app.use('/api/contact', contactRoutes);
 app.use('/api/notifications', notificationRoutes);
 
 // this api hits if any broken api calls
-app.route('*').get(endPoint).post(endPoint).put(endPoint);
+app.route('*').get(endPoint).post(endPoint).put(endPoint).delete(endPoint);
 
 // Configure CORS
+// origin: 'https://chatapp-mernapp.vercel.app',
 const corsOptions = {
-    origin: 'https://chatapp-mernapp.vercel.app',
-    methods: ['GET', 'POST', 'PUT'],
+    origin: 'http://localhost:3000',
+    // methods: ['GET', 'POST', 'PUT'],
 };
 
 // error handling function or middlewares
@@ -57,7 +62,9 @@ const io = require('socket.io')(server, {
     // for 60 sec, if user doesn't respond/message, the socket gonna close the connection (in order to save the bandwidth)
     pinTimeOut: 60000,
     cors: {
-        origin: "https://chatapp-mernapp.vercel.app"
+        origin: "http://localhost:3000",
+        credentials: true
+        // origin: "https://chatapp-mernapp.vercel.app"
     }
 });
 
@@ -81,7 +88,11 @@ io.on("connection", (socket) => {
     });
 
     // new room for user typing
-    socket.on("typing", (room) => socket.in(room).emit("typing"));
+    socket.on("typing", (room) => {
+        // get the chat id
+        console.log("room: ", room);
+        socket.in(room).emit("typing")
+    });
     // new room for user stop typing
     socket.on("stop typing", (room) => socket.in(room).emit("stop typing"));
 

@@ -1,4 +1,5 @@
 const asyncHandler = require('express-async-handler');
+const bcrypt = require('bcrypt');
 
 const { User } = require('../models/userModel');
 const generateToken = require('../config/generateToken');
@@ -125,4 +126,26 @@ const updateUser = asyncHandler(async (req, res) => {
     }
 });
 
-module.exports = { userRegister, authUser, allUsers, getAllUsers, updateUser };
+// Change Password For User By ID Controller
+// change password in case you forgot
+const editPasswordUser = asyncHandler(async (req, res) => {
+    try {
+        // get id and current & new password
+        const { id } = req.params;
+        const { newPassword } = req.body;
+
+        const salt = await bcrypt.genSalt(Number(process.env.SALT));
+        const hashPassword = await bcrypt.hash(newPassword, salt);
+
+        const updatedData = { password: hashPassword }
+        const options = { new: true };
+
+        await User.findByIdAndUpdate(id, updatedData, options);
+        res.status(200).send("Password has been Updated...!");
+
+    } catch (error) {
+        res.json(sendResponse(false, error.message));
+    }
+})
+
+module.exports = { userRegister, authUser, allUsers, getAllUsers, updateUser, editPasswordUser };

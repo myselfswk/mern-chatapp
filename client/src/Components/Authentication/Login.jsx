@@ -53,13 +53,13 @@ const Login = () => {
             });
             localStorage.setItem("userInfo", JSON.stringify(data));
             setLoading(false);
-            navigate(0); //to reload the page after login
             navigate("/chat");
+            navigate(0); //to reload the page after login
 
         } catch (error) {
             toast({
                 title: "Error Occured!",
-                description: error.response.data.message,
+                description: error.message,
                 status: "error",
                 duration: 5000,
                 isClosable: true,

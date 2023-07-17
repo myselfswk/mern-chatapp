@@ -50,6 +50,7 @@ const GroupChatModal = ({ children }) => {
 
             setLoading(false);
             setSearchResult(data);
+
         } catch (error) {
             toast({
                 title: "Error Occured!",
@@ -81,6 +82,7 @@ const GroupChatModal = ({ children }) => {
                     Authorization: `Bearer ${user.token}`,
                 },
             }
+            // save multiple users on the group chat
             const { data } = await axios.post(
                 `/api/chat/group`,
                 {
@@ -170,6 +172,7 @@ const GroupChatModal = ({ children }) => {
                             {selectedUsers.map((u) => (
                                 <UserBadgeItem
                                     key={u._id}
+                                    admin={user}
                                     user={u}
                                     handleFunction={() => handleDelete(u)}
                                 />
@@ -193,6 +196,7 @@ const GroupChatModal = ({ children }) => {
                         )}
                     </ModalBody>
 
+                    {/* Create Group Chat */}
                     <ModalFooter>
                         <Button variant="outline" colorScheme='blue' onClick={handleSubmit}>Create Chat</Button>
                     </ModalFooter>

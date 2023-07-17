@@ -4,16 +4,10 @@ require('colors');
 module.exports = () => {
     mongoose.set('strictQuery', false);
 
-    const connectionParams = {
-        useNewUrlParser: true,
-        useUnifiedTopology: true
-    };
-
     try {
-        mongoose.connect(process.env.MONGO_URI, connectionParams);
+        mongoose.connect(process.env.MONGO_URI);
         console.log('Connected to Database Successfully'.green.bold);
     } catch (error) {
-        console.log(error);
-        console.log('Could not Connected to DB...'.red.bold);
+        console.log('Could not Connected to DB...'.red.bold, error);
     }
 }

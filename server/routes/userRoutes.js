@@ -1,6 +1,6 @@
 const router = require('express').Router();
 
-const { userRegister, authUser, allUsers, updateUser, getAllUsers } = require('../controllers/userControllers');
+const { userRegister, authUser, allUsers, updateUser, getAllUsers, editPasswordUser } = require('../controllers/userControllers');
 const { protect } = require('../middlewares/authMiddleware');
 
 // Register User Route
@@ -19,5 +19,9 @@ router.get('/allusers', protect, getAllUsers);
 
 // Update User By ID Route
 router.put('/:id', updateUser);
+
+// Change Password For User By ID Route
+// change password in case you forgot
+router.put('/changepassword/:id', editPasswordUser);
 
 module.exports = router;

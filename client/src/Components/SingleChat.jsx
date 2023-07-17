@@ -21,7 +21,8 @@ import animationData from '../animations/typing.json';
 import './Style.css';
 
 import io from 'socket.io-client';
-const ENDPOINT = "https://mern-chatapp-kappa.vercel.app";
+// "https://mern-chatapp-kappa.vercel.app"
+const ENDPOINT = "http://localhost:8080";
 var socket, selectedChatCompare;
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
@@ -160,7 +161,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         // this function gonna run everytime any key is pressed
         if (!typing) {
             setTyping(true);
-            socket.emit("typing", selectedChat._id); //the selected chat id for room
+            socket.emit("typing", [selectedChat._id, user._id]); //the selected chat id for room
         }
 
         // debouncing type functionality
