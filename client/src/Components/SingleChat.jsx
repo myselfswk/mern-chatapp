@@ -21,7 +21,6 @@ import animationData from '../animations/typing.json';
 import './Style.css';
 
 import io from 'socket.io-client';
-// "https://mern-chatapp-kappa.vercel.app"
 const ENDPOINT = "http://localhost:8080";
 var socket, selectedChatCompare;
 
@@ -277,7 +276,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                         <Text fontSize="3xl" pb={3} fontFamily="Work sans">
                             Click on a user to start chatting
                         </Text>
-                    </Box >
+                    </Box>
                 )
             }
         </>

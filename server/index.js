@@ -42,10 +42,9 @@ app.use('/api/notifications', notificationRoutes);
 app.route('*').get(endPoint).post(endPoint).put(endPoint).delete(endPoint);
 
 // Configure CORS
-// origin: 'https://chatapp-mernapp.vercel.app',
 const corsOptions = {
-    origin: 'http://localhost:3000',
-    // methods: ['GET', 'POST', 'PUT'],
+    origin: '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE']
 };
 
 // error handling function or middlewares
@@ -62,9 +61,8 @@ const io = require('socket.io')(server, {
     // for 60 sec, if user doesn't respond/message, the socket gonna close the connection (in order to save the bandwidth)
     pinTimeOut: 60000,
     cors: {
-        origin: "http://localhost:3000",
+        origin: "*",
         credentials: true
-        // origin: "https://chatapp-mernapp.vercel.app"
     }
 });
 
@@ -76,7 +74,6 @@ io.on("connection", (socket) => {
     socket.on('setup', (userData) => {
         // create new room with the id of the user (exclusive for that particular user)
         socket.join(userData._id);
-        console.log(userData._id);
         socket.emit("connected");
     });
 
@@ -84,13 +81,11 @@ io.on("connection", (socket) => {
     // take room id from the frontend
     socket.on("join chat", (room) => {
         socket.join(room);
-        console.log("User Joined Room: " + room);
     });
 
     // new room for user typing
     socket.on("typing", (room) => {
         // get the chat id
-        console.log("room: ", room);
         socket.in(room).emit("typing")
     });
     // new room for user stop typing

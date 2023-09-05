@@ -186,29 +186,33 @@ const SideDrawer = () => {
                         </MenuButton>
                         <MenuList pl={2}>
                             {/* if there is no message, no notification */}
-                            {!notification.length &&
+                            {
+                                !notification.length &&
                                 <Lottie
                                     options={defaultOptions}
                                     height={70}
                                     width={70}
                                     style={{ margin: "auto" }}
-                                />}
-                            {notification.map((notif) => (
-                                <MenuItem
-                                    key={notif._id}
-                                    onClick={() => {
-                                        setSelectedChat(notif.chat); //redirect to that chat from which message send
-                                        setNotification(notification.filter((n) => n !== notif));
-                                        //remove that notification on which onclicked perform from notification array
-                                    }}
-                                >
-                                    {
-                                        notif.chat.isGroupChat
-                                            ? `New Message in ${notif.chat.chatName}`
-                                            : `New Message from ${getSender(user, notif.chat.users)}`
-                                    }
-                                </MenuItem>
-                            ))}
+                                />
+                            }
+                            {
+                                notification.map((notif) => (
+                                    <MenuItem
+                                        key={notif._id}
+                                        onClick={() => {
+                                            setSelectedChat(notif.chat); //redirect to that chat from which message send
+                                            setNotification(notification.filter((n) => n !== notif));
+                                            //remove that notification on which onclicked perform from notification array
+                                        }}
+                                    >
+                                        {
+                                            notif.chat.isGroupChat
+                                                ? `New Message in ${notif.chat.chatName}`
+                                                : `New Message from ${getSender(user, notif.chat.users)}`
+                                        }
+                                    </MenuItem>
+                                ))
+                            }
                         </MenuList>
                     </Menu>
                     <Menu>
