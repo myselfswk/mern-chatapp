@@ -6,11 +6,12 @@ import {
     FormControl,
     IconButton,
     useToast,
-    Spinner,
+    Spinner
 } from '@chakra-ui/react';
 import { ArrowBackIcon } from '@chakra-ui/icons';
 import axios from 'axios';
 import Lottie from 'react-lottie';
+import io from 'socket.io-client';
 
 import { ChatState } from '../Context/ChatProvider';
 import { getSender, getSenderFull } from '../config/ChatLogics';
@@ -18,10 +19,10 @@ import UpdateGroupChatModal from './miscellaneous/UpdateGroupChatModal';
 import ProfileModal from './miscellaneous/ProfileModal';
 import ScrollableChat from './ScrollableChat';
 import animationData from '../animations/typing.json';
+
 import './Style.css';
 
-import io from 'socket.io-client';
-const ENDPOINT = "http://localhost:8080";
+const ENDPOINT = "https://chatapp-nodejsapp.adaptable.app";
 var socket, selectedChatCompare;
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
@@ -171,7 +172,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             var timeNow = new Date().getTime();
             var timeDiff = timeNow - lastTypingTime;
             if (timeDiff >= timerLength && typing) {
-                socket.emit("stop typing", selectedChat._id);
+                socket.emit("stop typing", [selectedChat._id, user._id]);
                 setTyping(false);
             }
         }, timerLength);

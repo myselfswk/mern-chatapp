@@ -4,6 +4,7 @@ const { Chat } = require('../models/chatModel');
 const { User } = require('../models/userModel');
 
 // Access chats with specific user Controller
+// One on One Chat
 const accessChat = asyncHandler(async (req, res) => {
     const { userId } = req.body;
     if (!userId) {
