@@ -22,7 +22,8 @@ import animationData from '../animations/typing.json';
 
 import './Style.css';
 
-const ENDPOINT = "https://chatapp-nodejsapp.adaptable.app";
+// const ENDPOINT = "https://chatapp-nodejsapp.adaptable.app";
+const ENDPOINT = "http://localhost:8080";
 var socket, selectedChatCompare;
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
@@ -161,7 +162,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         // this function gonna run everytime any key is pressed
         if (!typing) {
             setTyping(true);
-            socket.emit("typing", [selectedChat._id, user._id]); //the selected chat id for room
+            socket.emit("typing", selectedChat._id); //the selected chat id for room
         }
 
         // debouncing type functionality
@@ -172,7 +173,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             var timeNow = new Date().getTime();
             var timeDiff = timeNow - lastTypingTime;
             if (timeDiff >= timerLength && typing) {
-                socket.emit("stop typing", [selectedChat._id, user._id]);
+                socket.emit("stop typing", selectedChat._id);
                 setTyping(false);
             }
         }, timerLength);
